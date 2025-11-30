@@ -12,6 +12,7 @@ import {
   Truck,
 } from "lucide-react";
 import Link from "next/link";
+import BreadcrumbStructuredData from "@/components/shared/BreadcrumbStructuredData";
 
 export default function ProductDetailPage() {
   const { category, id } = useParams();
@@ -31,16 +32,18 @@ export default function ProductDetailPage() {
 
         // Map slug to API category
         const categoryMap = {
-          'electronics': 'electronics',
-          'jewelery': 'jewelery',
-          'mens-clothing': "men's clothing",
-          'womens-clothing': "women's clothing"
+          electronics: "electronics",
+          jewelery: "jewelery",
+          "mens-clothing": "men's clothing",
+          "womens-clothing": "women's clothing",
         };
-        
+
         const apiCategory = categoryMap[category] || category;
 
         // Fetch product
-        const productRes = await fetch(`https://fakestoreapi.com/products/${id}`);
+        const productRes = await fetch(
+          `https://fakestoreapi.com/products/${id}`
+        );
         const productData = await productRes.json();
 
         if (productData) {
@@ -55,20 +58,22 @@ export default function ProductDetailPage() {
             category: productData.category,
             rating: productData.rating?.rate || 0,
             reviews: productData.rating?.count || 0,
-            brand: 'Brand',
-            inStock: true
+            brand: "Brand",
+            inStock: true,
           };
-          
+
           setProduct(transformedProduct);
 
           // Fetch related products from same category
-          const relatedRes = await fetch(`https://fakestoreapi.com/products/category/${apiCategory}`);
+          const relatedRes = await fetch(
+            `https://fakestoreapi.com/products/category/${apiCategory}`
+          );
           const relatedData = await relatedRes.json();
-          
+
           const related = relatedData
             .filter((p) => p.id !== productData.id)
             .slice(0, 4)
-            .map(item => ({
+            .map((item) => ({
               id: item.id,
               name: item.title,
               title: item.title,
@@ -76,15 +81,15 @@ export default function ProductDetailPage() {
               image: item.image,
               category: item.category,
               rating: item.rating?.rate || 0,
-              reviews: item.rating?.count || 0
+              reviews: item.rating?.count || 0,
             }));
-          
+
           setRelatedProducts(related);
         }
-        
+
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching product:', error);
+        console.error("Error fetching product:", error);
         setLoading(false);
       }
     };
@@ -148,7 +153,10 @@ export default function ProductDetailPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-cyan-50 py-8">
       {/* Use it in your ProductDetailPage return statement */}
-<BreadcrumbStructuredData category={product?.category} product={product} />
+      <BreadcrumbStructuredData
+        category={product?.category}
+        product={product}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="mb-8">
@@ -371,19 +379,27 @@ export default function ProductDetailPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex justify-between py-3 border-b border-gray-100">
                   <span className="font-medium text-gray-600">Category:</span>
-                  <span className="text-gray-900 font-medium capitalize">{product.category}</span>
+                  <span className="text-gray-900 font-medium capitalize">
+                    {product.category}
+                  </span>
                 </div>
                 <div className="flex justify-between py-3 border-b border-gray-100">
                   <span className="font-medium text-gray-600">Price:</span>
-                  <span className="text-gray-900 font-medium">${product.price?.toFixed(2)}</span>
+                  <span className="text-gray-900 font-medium">
+                    ${product.price?.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between py-3 border-b border-gray-100">
                   <span className="font-medium text-gray-600">Rating:</span>
-                  <span className="text-gray-900 font-medium">{product.rating}/5</span>
+                  <span className="text-gray-900 font-medium">
+                    {product.rating}/5
+                  </span>
                 </div>
                 <div className="flex justify-between py-3 border-b border-gray-100">
                   <span className="font-medium text-gray-600">Reviews:</span>
-                  <span className="text-gray-900 font-medium">{product.reviews}</span>
+                  <span className="text-gray-900 font-medium">
+                    {product.reviews}
+                  </span>
                 </div>
               </div>
             )}
@@ -420,7 +436,9 @@ export default function ProductDetailPage() {
             {activeTab === "summary" && (
               <div className="space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">Product Summary</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    Product Summary
+                  </h4>
                   <p className="text-gray-700 leading-relaxed mb-4">
                     {product.description}
                   </p>
@@ -428,19 +446,21 @@ export default function ProductDetailPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600">Average Rating</p>
-                        <p className="text-2xl font-bold text-purple-600">{product.rating?.toFixed(1)}/5</p>
+                        <p className="text-2xl font-bold text-purple-600">
+                          {product.rating?.toFixed(1)}/5
+                        </p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Total Reviews</p>
-                        <p className="text-2xl font-bold text-cyan-600">{product.reviews}</p>
+                        <p className="text-2xl font-bold text-cyan-600">
+                          {product.reviews}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             )}
-
-
           </div>
         </div>
 
@@ -454,10 +474,10 @@ export default function ProductDetailPage() {
               <Link
                 href={`/category/${(() => {
                   const categorySlugMap = {
-                    'electronics': 'electronics',
-                    'jewelery': 'jewelery',
-                    "men's clothing": 'mens-clothing',
-                    "women's clothing": 'womens-clothing'
+                    electronics: "electronics",
+                    jewelery: "jewelery",
+                    "men's clothing": "mens-clothing",
+                    "women's clothing": "womens-clothing",
                   };
                   return categorySlugMap[product.category] || product.category;
                 })()}`}
@@ -500,12 +520,13 @@ export default function ProductDetailPage() {
                     <button
                       onClick={() => {
                         const categorySlugMap = {
-                          'electronics': 'electronics',
-                          'jewelery': 'jewelery',
-                          "men's clothing": 'mens-clothing',
-                          "women's clothing": 'womens-clothing'
+                          electronics: "electronics",
+                          jewelery: "jewelery",
+                          "men's clothing": "mens-clothing",
+                          "women's clothing": "womens-clothing",
                         };
-                        const slug = categorySlugMap[product.category] || product.category;
+                        const slug =
+                          categorySlugMap[product.category] || product.category;
                         router.push(`/category/${slug}/${relatedProduct.id}`);
                       }}
                       className="w-full mt-3 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white py-2 px-4 rounded text-sm font-medium transition-all duration-300 transform hover:scale-105"
